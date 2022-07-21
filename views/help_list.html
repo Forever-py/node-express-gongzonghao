@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<style>
+			input,
+			button {
+				width: 100%;
+				height: 100px;
+				font-size: 36px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="form">
+			<input type="text" name="" id="needName" placeholder="求助者姓名"><br />
+			<input type="text" name="" id="needTel" placeholder="求助者联系方式"><br />
+			<input type="text" name="" id="needAddress" placeholder="求助者地址"><br />
+			<button type="button" id="btn">发布求助信息</button>
+		</div>
+		<script>
+			console.log(serilizeUrl(window.location.href));
+
+			// 已进入页面就获取openid
+			$.ajax({
+				method: 'POST',
+				url: '/users/get_openid',
+				data: {
+					code: serilizeUrl(window.location.href).code,
+				}
+			}).done(function(res) {
+				console.log(res);
+				localStorage.setItem('openid', res.openid);
+			}).fail(function(err) {
+				console.log(err)
+			})
+
+			// 处理 location 的参数，将参数转为对象结构
+			function serilizeUrl(url) {
+				var urlObj = {};
+				if (/\?/.test(url)) { // 判断是否有参数
+					var urlStr = url.split('?')[1]; // 截取问好之后的字符串
+					var urlArr = urlStr.split('&');
+					for (var i = 0; i < urlArr.length; i++) {
+						var urlItem = urlArr[i];
+						var item = urlItem.split('=');
+						urlObj[item[0]] = item[1];
+					}
+					return urlObj;
+				}
+				return null;
+			}
+
+			// 发布求助信息
+			$('#btn').on('click', function() {
+				$.ajax({
+					method: 'POST',
+					url: '/help/add',
+					data: {
+						needName: $('#needName').val(),
+						needTel: $('#needTel').val(),
+						needAddress: $('#needAddress').val(),
+						openid: localStorage.getItem('openid')
+					}
+				}).done(function(res) {
+					console.log(res);
+				}).fail(function(err) {
+					console.log(err);
+				})
+			})
+		</script>
+	</body>
+</html>

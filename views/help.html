@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>口罩互助活动页</title>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+			}
+			.box {
+				width: 100%;
+				height: 310px;
+				background: url(/images/bg.jpg);
+				background-size: cover;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box" onclick="getCode()"></div>
+		
+		<script>
+			function getCode () {
+				window.location= '/users/wx_getcode';
+			}
+		</script>
+	</body>
+</html>
